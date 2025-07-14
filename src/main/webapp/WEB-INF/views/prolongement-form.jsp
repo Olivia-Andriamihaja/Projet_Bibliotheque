@@ -64,6 +64,7 @@
             bottom: 0;
             background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D2691E' fill-opacity='0.1'%3E%3Cpath d='M20 0L0 20L20 40L40 20L20 0Z'/%3E%3C/g%3E%3C/svg%3E");
             opacity: 0.3;
+            pointer-events: none;
         }
 
         .sidebar-header {
@@ -127,6 +128,7 @@
             border-radius: 10px;
             opacity: 0;
             transition: opacity 0.3s ease;
+            pointer-events: none;
         }
 
         .sidebar a:hover::before {
@@ -155,9 +157,7 @@
         }
 
         .btn-logout {
-            background: linear-gradient(145deg, #8B0000
-
-, #DC143C);
+            background: linear-gradient(145deg, #8B0000, #DC143C);
             color: #F5DEB3;
             border: none;
             border-radius: 10px;
@@ -209,6 +209,7 @@
             border-radius: 20px;
             z-index: -1;
             opacity: 0.3;
+            pointer-events: none;
         }
 
         .main-header h1 {
@@ -259,6 +260,7 @@
             background: linear-gradient(45deg, transparent, rgba(245, 222, 179, 0.3), transparent);
             opacity: 0;
             transition: opacity 0.3s ease;
+            pointer-events: none; /* FIX: Ajout de pointer-events: none */
         }
 
         .form-container:hover::before {
@@ -267,6 +269,8 @@
 
         .form-group {
             margin-bottom: 20px;
+            position: relative;
+            z-index: 2; /* FIX: Ajout de z-index pour s'assurer que les éléments sont au-dessus */
         }
 
         .form-group label {
@@ -284,10 +288,12 @@
             border: 2px solid #D2691E;
             border-radius: 10px;
             font-size: 16px;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.9); /* FIX: Changé de 0.1 à 0.9 pour plus d'opacité */
             color: #654321;
             font-family: 'Georgia', serif;
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 3; /* FIX: Z-index plus élevé pour les champs de saisie */
         }
 
         .form-group select:focus,
@@ -295,6 +301,7 @@
             outline: none;
             border-color: #F4A460;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            background: rgba(255,255,255,1); /* FIX: Fond complètement opaque au focus */
         }
 
         .btn-submit {
@@ -311,6 +318,7 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             position: relative;
             overflow: hidden;
+            z-index: 2; /* FIX: Z-index pour le bouton */
         }
 
         .btn-submit::before {
@@ -322,6 +330,7 @@
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             transition: left 0.6s ease;
+            pointer-events: none;
         }
 
         .btn-submit:hover::before {
@@ -350,6 +359,7 @@
             overflow: hidden;
             text-decoration: none;
             display: inline-block;
+            z-index: 2;
         }
 
         .btn-retour::before {
@@ -361,6 +371,7 @@
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             transition: left 0.6s ease;
+            pointer-events: none;
         }
 
         .btn-retour:hover::before {
@@ -381,6 +392,7 @@
             font-weight: 500;
             position: relative;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            z-index: 2;
         }
 
         .alert-success {
@@ -420,6 +432,7 @@
             position: relative;
             transition: all 0.3s ease;
             overflow: hidden;
+            z-index: 2;
         }
 
         .emprunt-details:hover {
@@ -437,6 +450,7 @@
             background: linear-gradient(45deg, transparent, rgba(245, 222, 179, 0.3), transparent);
             opacity: 0;
             transition: opacity 0.3s ease;
+            pointer-events: none;
         }
 
         .emprunt-details:hover::before {
@@ -445,12 +459,16 @@
 
         .emprunt-left {
             flex: 1;
+            position: relative;
+            z-index: 2;
         }
 
         .emprunt-right {
             text-align: right;
             color: #8B4513;
             font-size: 0.9em;
+            position: relative;
+            z-index: 2;
         }
 
         .livre-titre {
@@ -495,6 +513,8 @@
             border: 2px solid #D2691E;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 2;
+            position: relative;
         }
 
         .no-emprunts h3 {
