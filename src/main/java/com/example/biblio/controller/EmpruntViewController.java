@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpSession;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -50,7 +52,8 @@ public class EmpruntViewController {
             @RequestParam Long idLivre,
             @RequestParam String typeEmprunt,
             @RequestParam Long userId,
-            HttpSession session) {
+            HttpSession session,
+            @RequestParam String dateDebutEmprunt) {
         Long adminId = (Long) session.getAttribute("userId");
         if (adminId == null) {
             return "redirect:/login";
@@ -69,11 +72,12 @@ public class EmpruntViewController {
             if (penaliteService.utilisateurAPenaliteActive(user)) {
                 return "redirect:/emprunt/nouveau?error=penalite_active";
             }
+            LocalDateTime dateDebut = LocalDate.parse(dateDebutEmprunt).atStartOfDay();
             
             Emprunt emprunt = new Emprunt();
             emprunt.setLivre(livre);
             emprunt.setEmprunteur(user);
-            emprunt.setDateDebutEmprunt(LocalDateTime.now());
+            emprunt.setDateDebutEmprunt(dateDebut);
             emprunt.setTypeDeLecture(typeEmprunt);
             emprunt.setProlongement(false);
             emprunt.setNombreProlongement(0);

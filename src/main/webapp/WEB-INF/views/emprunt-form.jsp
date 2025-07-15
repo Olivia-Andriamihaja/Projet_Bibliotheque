@@ -465,7 +465,7 @@
             <form action="${pageContext.request.contextPath}/emprunt/creer" method="post">
                 <div class="form-group">
                     <label for="userId">Sélectionner l'utilisateur :</label>
-                    <select name="userId" id="userId" required aria-label="Sélectionner un utilisateur">
+                    <select name="userId" id="userId" required>
                         <option value="">-- Choisir un utilisateur --</option>
                         <c:forEach items="${utilisateurs}" var="u">
                             <option value="${u.id}">${u.userName} (${u.email})</option>
@@ -474,25 +474,26 @@
                 </div>
                 <div class="form-group">
                     <label for="livre">Sélectionner un livre :</label>
-                    <select name="idLivre" id="livre" required aria-label="Sélectionner un livre">
+                    <select name="idLivre" id="livre" required>
                         <option value="">-- Choisir un livre --</option>
                         <c:forEach items="${livresDisponibles}" var="livre">
                             <option value="${livre.id}">${livre.titre} - ${livre.auteur} (${livre.numExemplaire})</option>
                         </c:forEach>
                     </select>
                 </div>
-
+                <div class="form-group">
+                    <label for="dateDebutEmprunt">Date de début de l'emprunt :</label>
+                    <input type="date" id="dateDebutEmprunt" name="dateDebutEmprunt" required>
+                </div>
                 <div class="form-group">
                     <label>Type d'emprunt :</label>
                     <div class="radio-group">
                         <input type="radio" id="surPlace" name="typeEmprunt" value="SUR_PLACE" required>
                         <label class="radio-label" for="surPlace">Sur place</label>
-
                         <input type="radio" id="aEmporter" name="typeEmprunt" value="A_EMPORTER">
                         <label class="radio-label" for="aEmporter">À emporter</label>
                     </div>
                 </div>
-
                 <button type="submit" class="submit-btn">Emprunter</button>
                 <a href="${pageContext.request.contextPath}/livres" class="btn-retour">Retour à la liste des livres</a>
             </form>
