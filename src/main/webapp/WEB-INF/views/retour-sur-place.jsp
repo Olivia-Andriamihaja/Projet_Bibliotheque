@@ -491,20 +491,23 @@
         
         <div class="form-container">
             <h2>Retour d'un livre lu sur place</h2>
-            <form action="${pageContext.request.contextPath}/emprunt/retour-sur-place" method="post">
+             <form action="${pageContext.request.contextPath}/emprunt/retour-sur-place" method="post">
                 <label for="empruntId">Sélectionner la personne :</label>
-                <select name="empruntId" id="empruntId" required aria-label="Sélectionner un emprunt sur place">
+                <select name="empruntId" id="empruntId" required>
                     <option value="">-- Choisir une personne --</option>
                     <c:forEach items="${empruntsSurPlace}" var="e">
                         <option value="${e.id}">${e.emprunteur.userName} (${e.livre.titre})</option>
                     </c:forEach>
                 </select>
+                <label for="dateRetour">Date de retour :</label>
+                <input type="date" id="dateRetour" name="dateRetour" required>
                 <button type="submit">Valider le retour</button>
             </form>
             <c:if test="${empty empruntsSurPlace}">
                 <p class="empty">Aucun emprunt sur place en cours.</p>
             </c:if>
         </div>
+        
         <a href="${pageContext.request.contextPath}/livres" class="btn-retour">Retour à la liste des livres</a>
     </div>
 

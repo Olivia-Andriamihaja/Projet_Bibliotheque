@@ -123,10 +123,11 @@ public class EmpruntViewController {
     }
 
     @PostMapping("/emprunt/retour-sur-place")
-    public String validerRetourSurPlace(@RequestParam Long empruntId) {
+    public String validerRetourSurPlace(@RequestParam Long empruntId, @RequestParam String dateRetour) {
         Emprunt emprunt = empruntRepository.findById(empruntId).orElse(null);
         if (emprunt != null && "SUR_PLACE".equals(emprunt.getTypeDeLecture())) {
-            emprunt.setDateFinEmprunt(LocalDateTime.now());
+            LocalDateTime retour = LocalDate.parse(dateRetour).atStartOfDay();
+            emprunt.setDateFinEmprunt(retour);
             empruntRepository.save(emprunt);
         }
         return "redirect:/emprunt/retour-sur-place?success";
