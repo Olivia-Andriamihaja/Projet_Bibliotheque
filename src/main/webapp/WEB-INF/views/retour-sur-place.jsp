@@ -491,12 +491,13 @@
         
         <div class="form-container">
             <h2>Retour d'un livre lu sur place</h2>
-             <form action="${pageContext.request.contextPath}/emprunt/retour-sur-place" method="post">
+            <form action="${pageContext.request.contextPath}/emprunt/retour-sur-place" method="post">
                 <label for="empruntId">Sélectionner la personne :</label>
                 <select name="empruntId" id="empruntId" required>
-                    <option value="">-- Choisir une personne --</option>
+                    <option value="">-- Choisir un emprunt --</option>
                     <c:forEach items="${empruntsSurPlace}" var="e">
-                        <option value="${e.id}">${e.emprunteur.userName} (${e.livre.titre})</option>
+                        <option value="${e.id}">${e.emprunteur.userName} (${e.livre.titre}, ${e.typeDeLecture})
+                        </option>
                     </c:forEach>
                 </select>
                 <label for="dateRetour">Date de retour :</label>

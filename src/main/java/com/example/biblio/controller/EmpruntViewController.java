@@ -1,18 +1,28 @@
 package com.example.biblio.controller;
 
-import com.example.biblio.model.*;
-import com.example.biblio.repository.*;
-import com.example.biblio.service.PenaliteService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import jakarta.servlet.http.HttpSession;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.biblio.model.Emprunt;
+import com.example.biblio.model.Livre;
+import com.example.biblio.model.Users;
+import com.example.biblio.repository.EmpruntRepository;
+import com.example.biblio.repository.LivreRepository;
+import com.example.biblio.repository.PenaliteRepository;
+import com.example.biblio.repository.UsersRepository;
+import com.example.biblio.service.PenaliteService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class EmpruntViewController {
@@ -95,6 +105,7 @@ public class EmpruntViewController {
         }
     }
 
+    
     @PostMapping("/emprunt/{id}/retour")
     public String retournerLivre(@PathVariable Long id) {
         Emprunt emprunt = empruntRepository.findById(id).orElse(null);
@@ -118,20 +129,58 @@ public class EmpruntViewController {
             }
         }
         
-        model.addAttribute("empruntsSurPlace", empruntRepository.findByTypeDeLectureAndDateFinEmpruntIsNull("SUR_PLACE"));
+        // Récupérer tous les emprunts actifs (SUR_PLACE avec dateFinEmprunt null ou A_EMPORTER avec dateFinEmprunt future)
+        model.addAttribute("empruntsSurPlace", empruntRepository.findAllActiveEmprunts(LocalDateTime.now()));
         return "retour-sur-place";
     }
 
     @PostMapping("/emprunt/retour-sur-place")
-    public String validerRetourSurPlace(@RequestParam Long empruntId, @RequestParam String dateRetour) {
+    public String validerRetourSurPlace(@RequestParam Long empruntId) {
         Emprunt emprunt = empruntRepository.findById(empruntId).orElse(null);
-        if (emprunt != null && "SUR_PLACE".equals(emprunt.getTypeDeLecture())) {
-            LocalDateTime retour = LocalDate.parse(dateRetour).atStartOfDay();
-            emprunt.setDateFinEmprunt(retour);
+        if (emprunt != null && (emprunt.getDateFinEmprunt() == null || emprunt.getDateFinEmprunt().isAfter(LocalDateTime.now()))) {
+            emprunt.setDateFinEmprunt(LocalDateTime.now());
             empruntRepository.save(emprunt);
         }
         return "redirect:/emprunt/retour-sur-place?success";
     }
+
+    // @PostMapping("/emprunt/{id}/retour")
+    // public String retournerLivre(@PathVariable Long id) {
+    //     Emprunt emprunt = empruntRepository.findById(id).orElse(null);
+        
+    //     if (emprunt != null && emprunt.getTypeDeLecture().equals("SUR_PLACE")) {
+    //         emprunt.setDateFinEmprunt(LocalDateTime.now());
+    //         empruntRepository.save(emprunt);
+    //     }
+        
+    //     return "redirect:/livres";
+    // }
+
+    // @GetMapping("/emprunt/retour-sur-place")
+    // public String afficherRetourSurPlace(Model model, HttpSession session) {
+    //     Long userId = (Long) session.getAttribute("userId");
+    //     if (userId != null) {
+    //         Users user = usersRepository.findById(userId).orElse(null);
+    //         if (user != null) {
+    //             boolean isAdmin = "admin".equalsIgnoreCase(user.getProfilFormule().getProfil());
+    //             model.addAttribute("isAdmin", isAdmin);
+    //         }
+    //     }
+        
+    //     model.addAttribute("empruntsSurPlace", empruntRepository.findByTypeDeLectureAndDateFinEmpruntIsNull("SUR_PLACE"));
+    //     return "retour-sur-place";
+    // }
+
+    // @PostMapping("/emprunt/retour-sur-place")
+    // public String validerRetourSurPlace(@RequestParam Long empruntId, @RequestParam String dateRetour) {
+    //     Emprunt emprunt = empruntRepository.findById(empruntId).orElse(null);
+    //     if (emprunt != null && "SUR_PLACE".equals(emprunt.getTypeDeLecture())) {
+    //         LocalDateTime retour = LocalDate.parse(dateRetour).atStartOfDay();
+    //         emprunt.setDateFinEmprunt(retour);
+    //         empruntRepository.save(emprunt);
+    //     }
+    //     return "redirect:/emprunt/retour-sur-place?success";
+    // }
     
     @GetMapping("/emprunt/prolongement")
     public String afficherFormulaireProlongement(Model model, HttpSession session) {
